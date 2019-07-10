@@ -1,0 +1,175 @@
+{
+	"metadata": {
+		"version": 1
+	},
+	"application": {
+		"name": "cpp-cppcheck",
+		"language": "CPP",
+		"artifact_store": {
+			"type": "s3",
+			"repositories": [
+				{
+					"category": "rc-packaging",
+					"bucket": "guide-rails-calculi-rc"
+				},
+				{
+					"category": "final-packaging",
+					"bucket": "guide-rails-calculi-final"
+				},
+				{
+					"category": "logs",
+					"bucket": "guide-rails-calculi-logs"
+				}
+			]
+		}
+	},
+	"pipeline": {
+		"segments": [
+			{
+				"name": "Build",
+				"segment_type": "build",
+				"job_steps": [
+					{
+						"name": "Configure",
+						"definition": "Configure the build",
+						"command": "cmake -G 'Unix Makefiles'",
+						"properties": null
+					},
+					{
+						"name": "Docker",
+						"definition": "Docker",
+						"command": "docker build -t cppcheck:latest .",
+						"properties": null
+					},
+					{
+						"name": "Install",
+						"definition": "Make Install",
+						"command": "# cd build\n# make install",
+						"properties": null
+					},
+					{
+						"name": "Test",
+						"definition": "Make Test",
+						"command": "# cd build\n# export GTEST_OUTPUT=\\'xml:./test.xml'\n# make test\n# find . -name \\'*.gcda\\' \n# ls ./test/results'",
+						"properties": null
+					},
+					{
+						"name": "Merge Tests",
+						"definition": "Merge Test Results",
+						"command": "# python ./xmlcombine.py ./build/test/results/*.xml  \u003e ./test.xml\n# ls -l",
+						"properties": null
+					}
+				],
+				"exit_actions": {
+					"default": {
+						"code_analysis": {
+							"publish": false,
+							"properties": null
+						}
+					},
+					"on_success": {
+						"code_analysis": null
+					},
+					"on_failure": {
+						"code_analysis": null
+					},
+					"on_abort": {
+						"code_analysis": null
+					}
+				},
+				"deployment_strategy": {},
+				"application_init": {
+					"command": "",
+					"arguments": null
+				},
+				"instance_tags": [
+					{
+						"name": "application.name",
+						"value": "((application.name))"
+					}
+				],
+				"post_deployment_actions": {
+					"instances": null,
+					"loadbalanced": false,
+					"loadbalancer": {
+						"TargetGroupName": "",
+						"TargetGroupPort": 0,
+						"TargetGroupProtocol": "",
+						"TargetType": "",
+						"VPCID": "",
+						"HealthCheckEnabled": false,
+						"HealthCheckPort": "",
+						"UnhealthyThresholdCount": 0
+					}
+				},
+				"cache_info": {}
+			}
+		],
+		"exit_actions": {
+			"default": {
+				"fetch_logs": true,
+				"notifications": [
+					{
+						"type": "slack",
+						"send_notification": false,
+						"to": null,
+						"message": ""
+					}
+				],
+				"code_analysis": {
+					"publish": true,
+					"properties": null
+				},
+				"delete_instances": true
+			},
+			"on_success": {
+				"notifications": [
+					{
+						"type": "slack",
+						"send_notification": false,
+						"to": null,
+						"message": ""
+					}
+				],
+				"code_analysis": null
+			},
+			"on_failure": {
+				"notifications": [
+					{
+						"type": "slack",
+						"send_notification": false,
+						"to": null,
+						"message": ""
+					}
+				],
+				"code_analysis": null
+			},
+			"on_abort": {
+				"notifications": [
+					{
+						"type": "slack",
+						"send_notification": false,
+						"to": null,
+						"message": ""
+					}
+				],
+				"code_analysis": null
+			}
+		},
+		"default_properties": null,
+		"deployment_files": [],
+		"application_init": {
+			"command": "",
+			"arguments": null
+		},
+		"process": {
+			"init": {
+				"command": ""
+			}
+		},
+		"releases": []
+	},
+	"organization": {
+		"orgname": "Tutorial"
+	}
+}
