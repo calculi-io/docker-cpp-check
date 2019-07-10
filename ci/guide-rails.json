@@ -32,7 +32,7 @@
 					{
 						"name": "Configure",
 						"definition": "Configure the build",
-						"command": "cmake -G 'Unix Makefiles'",
+						"command": "# cmake -G 'Unix Makefiles'",
 						"properties": null
 					},
 					{
