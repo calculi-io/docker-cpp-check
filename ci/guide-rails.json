@@ -44,7 +44,7 @@
 					{
 						"name": "Docker",
 						"definition": "Docker",
-						"command": "# docker build -t cppcheck:latest .",
+						"command": "docker build -t cppcheck:latest .",
 						"properties": null
 					},
 					{
