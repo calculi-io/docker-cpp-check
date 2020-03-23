@@ -38,7 +38,7 @@
 					{
 						"name": "Build cppcheck",
 						"definition": "Build cppcheck",
-						"command": "mkdir build\ncd build\ncmake ..\ncmake --build . ",
+						"command": "mkdir build\ncd build\ncmake ..\ncmake --build .",
 						"properties": null
 					},
 					{
@@ -162,7 +162,13 @@
 				"code_analysis": null
 			}
 		},
-		"default_properties": null,
+		"default_properties": [
+			{
+				"name": "gr.docker.enabled",
+				"value": "false",
+				"type": "string"
+			}
+		],
 		"deployment_files": [],
 		"application_init": {
 			"command": "",
