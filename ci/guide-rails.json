@@ -1,6 +1,6 @@
 {
 	"metadata": {
-		"version": 1
+		"version": 2
 	},
 	"application": {
 		"name": "cpp-cppcheck",
@@ -28,48 +28,9 @@
 			{
 				"name": "Build",
 				"segment_type": "build",
-				"job_steps": [
-					{
-						"name": "Get cppcheck",
-						"definition": "Get cppcheck",
-						"command": "git clone https://github.com/danmar/cppcheck.git\nmv cppcheck/* .\nrm -rf cppcheck ",
-						"properties": null
-					},
-					{
-						"name": "Build cppcheck",
-						"definition": "Build cppcheck",
-						"command": "mkdir build\ncd build\ncmake ..\ncmake --build .",
-						"properties": null
-					},
-					{
-						"name": "Docker",
-						"definition": "Docker",
-						"command": "# docker build -t cppcheck:latest .",
-						"properties": null
-					},
-					{
-						"name": "Install",
-						"definition": "Make Install",
-						"command": "# cd build\n# make install",
-						"properties": null
-					},
-					{
-						"name": "Test",
-						"definition": "Make Test",
-						"command": "# cd build\n# export GTEST_OUTPUT=\\'xml:./test.xml'\n# make test\n# find . -name \\'*.gcda\\' \n# ls ./test/results'",
-						"properties": null
-					},
-					{
-						"name": "Merge Tests",
-						"definition": "Merge Test Results",
-						"command": "# python ./xmlcombine.py ./build/test/results/*.xml  \u003e ./test.xml\n# ls -l",
-						"properties": null
-					}
-				],
 				"exit_actions": {
 					"default": {
 						"code_analysis": {
-							"publish": false,
 							"properties": null
 						}
 					},
@@ -84,10 +45,7 @@
 					}
 				},
 				"deployment_strategy": {},
-				"application_init": {
-					"command": "",
-					"arguments": null
-				},
+				"application_init": {},
 				"instance_tags": [
 					{
 						"name": "application.name",
@@ -108,7 +66,50 @@
 						"UnhealthyThresholdCount": 0
 					}
 				},
-				"cache_info": {}
+				"cache_info": {},
+				"tasks": [
+					{
+						"name": "cpp-cppcheck",
+						"steps": [
+							{
+								"name": "Get cppcheck",
+								"definition": "Get cppcheck",
+								"command": "git clone https://github.com/danmar/cppcheck.git\nmv cppcheck/* .\nrm -rf cppcheck ",
+								"properties": null
+							},
+							{
+								"name": "Build cppcheck",
+								"definition": "Build cppcheck",
+								"command": "mkdir build\ncd build\ncmake ..\ncmake --build .",
+								"properties": null
+							},
+							{
+								"name": "Docker",
+								"definition": "Docker",
+								"command": "# docker build -t cppcheck:latest .",
+								"properties": null
+							},
+							{
+								"name": "Install",
+								"definition": "Make Install",
+								"command": "# cd build\n# make install",
+								"properties": null
+							},
+							{
+								"name": "Test",
+								"definition": "Make Test",
+								"command": "# cd build\n# export GTEST_OUTPUT=\\'xml:./test.xml'\n# make test\n# find . -name \\'*.gcda\\' \n# ls ./test/results'",
+								"properties": null
+							},
+							{
+								"name": "Merge Tests",
+								"definition": "Merge Test Results",
+								"command": "# python ./xmlcombine.py ./build/test/results/*.xml  \u003e ./test.xml\n# ls -l",
+								"properties": null
+							}
+						]
+					}
+				]
 			}
 		],
 		"exit_actions": {
@@ -116,10 +117,7 @@
 				"fetch_logs": true,
 				"notifications": [
 					{
-						"type": "slack",
-						"send_notification": false,
-						"to": null,
-						"message": ""
+						"type": "slack"
 					}
 				],
 				"code_analysis": {
@@ -131,10 +129,7 @@
 			"on_success": {
 				"notifications": [
 					{
-						"type": "slack",
-						"send_notification": false,
-						"to": null,
-						"message": ""
+						"type": "slack"
 					}
 				],
 				"code_analysis": null
@@ -142,10 +137,7 @@
 			"on_failure": {
 				"notifications": [
 					{
-						"type": "slack",
-						"send_notification": false,
-						"to": null,
-						"message": ""
+						"type": "slack"
 					}
 				],
 				"code_analysis": null
@@ -153,10 +145,7 @@
 			"on_abort": {
 				"notifications": [
 					{
-						"type": "slack",
-						"send_notification": false,
-						"to": null,
-						"message": ""
+						"type": "slack"
 					}
 				],
 				"code_analysis": null
@@ -170,14 +159,9 @@
 			}
 		],
 		"deployment_files": [],
-		"application_init": {
-			"command": "",
-			"arguments": null
-		},
+		"application_init": {},
 		"process": {
-			"init": {
-				"command": ""
-			}
+			"init": {}
 		},
 		"releases": []
 	},
